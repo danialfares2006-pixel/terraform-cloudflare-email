@@ -1,0 +1,37 @@
+# Copy to terraform.tfvars and replace every placeholder.
+# Do not commit terraform.tfvars if it contains sensitive or account-specific data.
+
+domains = {
+  "example-outreach-1.com" = {
+    account_id = "CLOUDFLARE_ACCOUNT_ID"
+    zone_id    = "ZONE_ID_1"
+
+    mx = {
+      "MAIL_PROVIDER_MX_HOST" = 10
+    }
+
+    spf_terms = [
+      "include:MAIL_PROVIDER_SPF",
+      "~all"
+    ]
+
+    dmarc_policy = "none"
+    dmarc_rua = [
+      "mailto:dmarc@example-outreach-1.com"
+    ]
+
+    tlsrpt_rua = [
+      "mailto:tls-report@example-outreach-1.com"
+    ]
+
+    domainkeys = {
+      "selector1" = {
+        type  = "CNAME"
+        value = "PROVIDER_DKIM_TARGET"
+      }
+    }
+  }
+
+  # Duplicate this block for additional domains only after the provider
+  # gives you the correct MX/SPF/DKIM values for that domain.
+}
